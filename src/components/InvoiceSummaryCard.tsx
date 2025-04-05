@@ -13,6 +13,7 @@ interface InvoiceSummaryCardProps {
   colorClass?: string;
   bgClass?: string;
   showDiscounts?: boolean;
+  showCategoryHeader?: boolean;
 }
 
 const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
@@ -22,6 +23,7 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
   colorClass = "text-purple-700",
   bgClass = "bg-white",
   showDiscounts = false,
+  showCategoryHeader = true,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -75,11 +77,13 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
       
       {isExpanded && (
         <div className="px-4 pb-3 bg-gray-50 animate-accordion-down">
-          <div className="grid grid-cols-3 text-xs font-medium text-gray-500 py-2">
-            <div className="text-left">Category</div>
-            <div className="text-right">Value</div>
-            <div className="text-right">GST</div>
-          </div>
+          {showCategoryHeader && (
+            <div className="grid grid-cols-3 text-xs font-medium text-gray-500 py-2">
+              <div className="text-left">Category</div>
+              <div className="text-right">Value</div>
+              <div className="text-right">GST</div>
+            </div>
+          )}
           <InvoiceDetailRow 
             label="Consideration" 
             detail={details.consideration} 
