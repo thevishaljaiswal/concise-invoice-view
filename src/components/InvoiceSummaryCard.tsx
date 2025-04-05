@@ -29,6 +29,12 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
     minimumFractionDigits: 2
   });
 
+  // Calculate the totals for Value and GST
+  const valueTotal = details.consideration.value + details.admin.value + 
+                     details.other.value + details.interest.value;
+  const gstTotal = details.consideration.gst + details.admin.gst + 
+                   details.other.gst + details.interest.gst;
+
   return (
     <Card className={cn("overflow-hidden transition-all duration-200", bgClass)}>
       <div 
@@ -58,6 +64,13 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
           <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} />
           <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} />
           <InvoiceDetailRow label="Interest" detail={details.interest} colorClass={colorClass} />
+          
+          {/* Total row */}
+          <div className="grid grid-cols-3 text-sm py-2 mt-1 border-t border-gray-300">
+            <div className={cn("text-left font-medium", colorClass)}>Total</div>
+            <div className="text-right font-semibold">{formatter.format(valueTotal)}</div>
+            <div className="text-right font-semibold">{formatter.format(gstTotal)}</div>
+          </div>
         </div>
       )}
     </Card>
