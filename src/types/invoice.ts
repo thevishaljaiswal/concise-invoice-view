@@ -1,7 +1,13 @@
 
+export interface DiscountItem {
+  value: number;
+  gst: number;
+}
+
 export interface DetailItem {
   value: number;
   gst: number;
+  discount?: DiscountItem;
 }
 
 export interface InvoiceDetails {

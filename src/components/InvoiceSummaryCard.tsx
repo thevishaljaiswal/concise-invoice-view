@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { InvoiceDetails } from "@/types/invoice";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -26,14 +25,32 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2
+    minimumFractionDigits: 2,
+    currencyDisplay: 'code'
   });
 
-  // Calculate the totals for Value and GST
+  const formatNumber = (value: number) => {
+    return formatter.format(value).replace("USD", "").trim();
+  };
+
   const valueTotal = details.consideration.value + details.admin.value + 
                      details.other.value + details.interest.value;
   const gstTotal = details.consideration.gst + details.admin.gst + 
                    details.other.gst + details.interest.gst;
+
+  const getNetValue = (item) => {
+    if (item.discount) {
+      return item.value - item.discount.value;
+    }
+    return item.value;
+  };
+
+  const getNetGST = (item) => {
+    if (item.discount) {
+      return item.gst - item.discount.gst;
+    }
+    return item.gst;
+  };
 
   return (
     <Card className={cn("overflow-hidden transition-all duration-200", bgClass)}>
@@ -44,7 +61,7 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
         <div className="font-medium">{title}</div>
         <div className="flex items-center gap-3">
           <span className={cn("font-semibold text-lg", colorClass)}>
-            {formatter.format(total)}
+            {formatNumber(total)}
           </span>
           {isExpanded ? 
             <ChevronUp className="h-4 w-4 text-gray-500" /> : 
@@ -60,16 +77,29 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
             <div className="text-right">Value</div>
             <div className="text-right">GST</div>
           </div>
-          <InvoiceDetailRow label="Consideration" detail={details.consideration} colorClass={colorClass} />
-          <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} />
-          <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} />
-          <InvoiceDetailRow label="Interest" detail={details.interest} colorClass={colorClass} />
+          <InvoiceDetailRow label="Consideration" detail={details.consideration} colorClass={colorClass} showDiscount={true} />
+          <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} showDiscount={true} />
           
-          {/* Total row */}
+          <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} showDiscount={true} />
+          
+          <div className="grid grid-cols-3 text-xs py-1 border-b border-gray-100">
+            <div className={cn("text-left font-medium", colorClass)}>Interest</div>
+            <div className="text-right">{formatNumber(details.interest.value)}</div>
+            <div className="text-right">{formatNumber(details.interest.gst)}</div>
+          </div>
+          
+          {details.interest.discount && (
+            <div className="grid grid-cols-3 text-xs py-1 pl-4 border-b border-gray-100 text-gray-500">
+              <div className="text-left">Discount</div>
+              <div className="text-right">-{formatNumber(details.interest.discount.value)}</div>
+              <div className="text-right">-{formatNumber(details.interest.discount.gst)}</div>
+            </div>
+          )}
+          
           <div className="grid grid-cols-3 text-sm py-2 mt-1 border-t border-gray-300">
             <div className={cn("text-left font-medium", colorClass)}>Total</div>
-            <div className="text-right font-semibold">{formatter.format(valueTotal)}</div>
-            <div className="text-right font-semibold">{formatter.format(gstTotal)}</div>
+            <div className="text-right font-semibold">{formatNumber(valueTotal)}</div>
+            <div className="text-right font-semibold">{formatNumber(gstTotal)}</div>
           </div>
         </div>
       )}
