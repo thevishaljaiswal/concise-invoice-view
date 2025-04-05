@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { InvoiceDetails } from "@/types/invoice";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -11,6 +12,7 @@ interface InvoiceSummaryCardProps {
   details: InvoiceDetails;
   colorClass?: string;
   bgClass?: string;
+  showDiscounts?: boolean;
 }
 
 const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
@@ -19,6 +21,7 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
   details,
   colorClass = "text-purple-700",
   bgClass = "bg-white",
+  showDiscounts = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -77,24 +80,11 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
             <div className="text-right">Value</div>
             <div className="text-right">GST</div>
           </div>
-          <InvoiceDetailRow label="Consideration" detail={details.consideration} colorClass={colorClass} showDiscount={true} />
-          <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} showDiscount={true} />
+          <InvoiceDetailRow label="Consideration" detail={details.consideration} colorClass={colorClass} showDiscount={showDiscounts} />
+          <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} showDiscount={showDiscounts} />
           
-          <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} showDiscount={true} />
-          
-          <div className="grid grid-cols-3 text-xs py-1 border-b border-gray-100">
-            <div className={cn("text-left font-medium", colorClass)}>Interest</div>
-            <div className="text-right">{formatNumber(details.interest.value)}</div>
-            <div className="text-right">{formatNumber(details.interest.gst)}</div>
-          </div>
-          
-          {details.interest.discount && (
-            <div className="grid grid-cols-3 text-xs py-1 pl-4 border-b border-gray-100 text-gray-500">
-              <div className="text-left">Discount</div>
-              <div className="text-right">-{formatNumber(details.interest.discount.value)}</div>
-              <div className="text-right">-{formatNumber(details.interest.discount.gst)}</div>
-            </div>
-          )}
+          <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} showDiscount={showDiscounts} />
+          <InvoiceDetailRow label="Interest" detail={details.interest} colorClass={colorClass} showDiscount={showDiscounts} />
           
           <div className="grid grid-cols-3 text-sm py-2 mt-1 border-t border-gray-300">
             <div className={cn("text-left font-medium", colorClass)}>Total</div>

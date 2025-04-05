@@ -17,6 +17,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ data }) => {
           total={data.payable.total} 
           details={data.payable.details}
           colorClass="text-purple-700"
+          showDiscounts={true}
         />
         <InvoiceSummaryCard 
           title="Total Invoice" 
