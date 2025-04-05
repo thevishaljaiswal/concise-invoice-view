@@ -80,11 +80,33 @@ const InvoiceSummaryCard: React.FC<InvoiceSummaryCardProps> = ({
             <div className="text-right">Value</div>
             <div className="text-right">GST</div>
           </div>
-          <InvoiceDetailRow label="Consideration" detail={details.consideration} colorClass={colorClass} showDiscount={showDiscounts} />
-          <InvoiceDetailRow label="Admin" detail={details.admin} colorClass={colorClass} showDiscount={showDiscounts} />
+          <InvoiceDetailRow 
+            label="Consideration" 
+            detail={details.consideration} 
+            colorClass={colorClass} 
+            showDiscount={showDiscounts} 
+          />
+          <InvoiceDetailRow 
+            label="Admin" 
+            detail={details.admin} 
+            colorClass={colorClass} 
+            showDiscount={showDiscounts} 
+          />
           
-          <InvoiceDetailRow label="Other" detail={details.other} colorClass={colorClass} showDiscount={showDiscounts} />
-          <InvoiceDetailRow label="Interest" detail={details.interest} colorClass={colorClass} showDiscount={showDiscounts} />
+          <InvoiceDetailRow 
+            label="Other" 
+            detail={details.other} 
+            colorClass={colorClass} 
+            showDiscount={showDiscounts}
+            collapsible={title === "Total Payable"} 
+          />
+          <InvoiceDetailRow 
+            label="Interest" 
+            detail={details.interest} 
+            colorClass={colorClass} 
+            showDiscount={showDiscounts}
+            collapsible={title === "Total Payable"} 
+          />
           
           <div className="grid grid-cols-3 text-sm py-2 mt-1 border-t border-gray-300">
             <div className={cn("text-left font-medium", colorClass)}>Total</div>
